@@ -1,12 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version> <!-- latest stable -->
+        <version>3.2.2</version>
         <relativePath/>
     </parent>
 
@@ -16,8 +17,10 @@
     <name>cris-auth-service</name>
     <description>Handles Login, Register, JWT token</description>
 
+    <!-- FORCE JAVA 17 -->
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -27,7 +30,7 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Web starter (REST APIs) -->
+        <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -71,8 +74,17 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!---MySQL -->
+        <!-- Source: https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+            <scope>compile</scope>
+        </dependency>
 
-        <!-- Testing -->
+
+        <!-- Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -84,4 +96,19 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- OVERRIDE Spring Boot's Java 21 default -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

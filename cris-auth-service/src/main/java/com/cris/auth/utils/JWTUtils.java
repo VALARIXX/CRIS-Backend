@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 @Component
 public class JWTUtils {
-	private final String secret="BENTEN";
+	private final String secret="BENTENbentenbentenbentenhgdgsdghdsfhsfghfghfghfsghsthsfthsfgbscxhsghsfghsghbsbxcbsdfsgseyujkmbvzet";
 	private final long expiration= 1000*60*60;
 	private final Key secretKey=Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 	
@@ -24,15 +24,19 @@ public class JWTUtils {
 				   .signWith(secretKey,SignatureAlgorithm.HS384)
 				   .compact();
 				   	}
-	public boolean validateToken(String token) {
-		try {
-			Jwts.parserBuilder()
+	public String extractEmail(String token){
+	return 	Jwts.parserBuilder()
 				.setSigningKey(secretKey)
 				.build()
 				.parseClaimsJws(token)
 				.getBody()
 				.getSubject();
-			return true;
+
+	}
+	public boolean validateToken(String token) {
+		try {
+			extractEmail(token);
+            return true;
 			} catch (JwtException e) {
 			return false;
 		}

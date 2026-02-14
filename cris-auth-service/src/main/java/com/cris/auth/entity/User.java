@@ -1,31 +1,23 @@
 package com.cris.auth.entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="User")
+@Table(name="user_tbl")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class User {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // Changed to IDENTITY
 	Long id;
-	
+
+	@Column(unique = true) // Optional: Ensures emails are unique in DB
 	String email;
 	String password;
-	public static Object builder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
