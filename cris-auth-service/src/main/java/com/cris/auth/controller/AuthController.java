@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.cris.auth.utils.JWTUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,40 +19,20 @@ import com.cris.auth.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-	private final UserServiceImpl userServiceImpl;
-	private  final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final JWTUtils jwtUtils;
+	@Autowired
+	private UserServiceImpl userServiceImpl;
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody Map<String, String> body) {
-		String email=body.get("email");
-		String password=body.get("password");
-		if(userRepository.getUserByEmail(email).isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email Al ready exists");
-		}
-		String encoded=passwordEncoder.encode(password);
-		userServiceImpl.CreateUser(User.builder().email(email).password(encoded).build());
-
-		return  ResponseEntity.ok("Successfully Created");
+		return  userServiceImpl.CreateUser(body);
 		
 	}
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody Map<String,String> body){
-		String email=body.get("email");
-		String password= body.get("password");
-		Optional<User> optionalUser=userRepository.getUserByEmail(email);
-		if(optionalUser.isEmpty()) {
-			return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not Found");
-		}
-		User user=optionalUser.get();
-		if(!passwordEncoder.matches(password,user.getPassword()))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Login");
-        String token = jwtUtils.generateToken(email);
-        return ResponseEntity.ok(Map.of("token",token));
-
+		return userServiceImpl.loginUser(body);
     }
 }

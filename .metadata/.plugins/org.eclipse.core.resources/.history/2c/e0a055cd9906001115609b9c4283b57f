@@ -1,0 +1,9 @@
+package com.cris.auth.service;
+
+import com.cris.auth.entity.User;
+
+public interface UserService {
+User getUserbyEmail(Long id);
+void CreateUser(User user);
+
+}

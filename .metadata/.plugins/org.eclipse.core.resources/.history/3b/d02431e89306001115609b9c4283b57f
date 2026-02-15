@@ -1,0 +1,5 @@
+package com.cris.auth.model;
+
+public class user {
+
+}
