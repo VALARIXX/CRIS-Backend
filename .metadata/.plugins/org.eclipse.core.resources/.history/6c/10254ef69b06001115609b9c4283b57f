@@ -1,9 +1,0 @@
-package com.cris.auth.service;
-
-import com.cris.auth.entity.User;
-
-public interface UserService {
-User getUserByEmail(String email);
-void CreateUser(User user);
-
-}

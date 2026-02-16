@@ -1,5 +1,0 @@
-package com.cris.auth.utils;
-
-public class JWTUtils {
-
-}
