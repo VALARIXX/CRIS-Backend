@@ -1,11 +1,14 @@
 package com.cris.auth.service;
 
 import com.cris.auth.entity.User;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 public interface UserService {
 User getUserByEmail(String email);
 
-User CreateUser(User user);
-
+    ResponseEntity<String> CreateUser(Map<String, String> body);
+    ResponseEntity<?> loginUser(Map<String,String> body);
 
 }
