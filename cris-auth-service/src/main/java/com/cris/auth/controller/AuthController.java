@@ -19,20 +19,21 @@ import com.cris.auth.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
+
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody Map<String, String> body) {
-		return  userServiceImpl.CreateUser(body);
-		
+		return userServiceImpl.CreateUser(body);
+
 	}
+
 	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestBody Map<String,String> body){
+	public ResponseEntity<?> loginUser(@RequestBody Map<String, String> body) {
 		return userServiceImpl.loginUser(body);
-    }
+	}
 }

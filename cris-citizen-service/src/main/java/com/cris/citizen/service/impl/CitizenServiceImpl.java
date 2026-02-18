@@ -22,7 +22,7 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Override
     public Citizen registerCitizen(Citizen citizen) {
-        citizen.setCitizenId("CIV-" + UUID.randomUUID().toString().substring(0,8).toUpperCase());
+        citizen.setCitizenId("CIV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         citizen.setResidencyStatus("ACTIVE");
         citizen.setCreatedAt(Instant.now());
         return citizenRepository.save(citizen);
@@ -35,12 +35,12 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
-    public List<Citizen> searchCitizens(String name) {
-        return citizenRepository.findByFullNameContainingIgnoreCase(name);
+    public List<Citizen> searchCitizens(String query) {
+        return citizenRepository.searchByNameOrId(query);
     }
 
     @Override
-    public Household createHousehold(String headCitizenId, Map<String,String> relations) {
+    public Household createHousehold(String headCitizenId, Map<String, String> relations) {
 
         Citizen head = citizenRepository.findByCitizenId(headCitizenId)
                 .orElseThrow(() -> new RuntimeException("Head citizen not found"));
@@ -67,6 +67,36 @@ public class CitizenServiceImpl implements CitizenService {
     @Override
     public List<Citizen> findFamilyMembers(String householdId) {
         return citizenRepository.findByHouseholdId(householdId);
+    }
+
+    @Override
+    public Citizen updateCitizen(String citizenId, Citizen updatedData) {
+        Citizen existing = findCitizenByCivicId(citizenId);
+
+        if (updatedData.getFullName() != null)
+            existing.setFullName(updatedData.getFullName());
+        if (updatedData.getAddress() != null)
+            existing.setAddress(updatedData.getAddress());
+        if (updatedData.getMobile() != null)
+            existing.setMobile(updatedData.getMobile());
+        if (updatedData.getOccupation() != null)
+            existing.setOccupation(updatedData.getOccupation());
+        if (updatedData.getFatherName() != null)
+            existing.setFatherName(updatedData.getFatherName());
+        if (updatedData.getMotherName() != null)
+            existing.setMotherName(updatedData.getMotherName());
+        if (updatedData.getMaritalStatus() != null)
+            existing.setMaritalStatus(updatedData.getMaritalStatus());
+        if (updatedData.getBloodGroup() != null)
+            existing.setBloodGroup(updatedData.getBloodGroup());
+        if (updatedData.getNationality() != null)
+            existing.setNationality(updatedData.getNationality());
+        if (updatedData.getAadharNumber() != null)
+            existing.setAadharNumber(updatedData.getAadharNumber());
+        if (updatedData.getPhotoUrl() != null)
+            existing.setPhotoUrl(updatedData.getPhotoUrl());
+
+        return citizenRepository.save(existing);
     }
 
 }

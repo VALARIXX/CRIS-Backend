@@ -15,30 +15,34 @@ public class CitizenController {
     private final CitizenService service;
 
     @PostMapping("/enroll")
-    public Citizen enroll(@RequestBody Citizen c){
+    public Citizen enroll(@RequestBody Citizen c) {
         return service.registerCitizen(c);
     }
 
     @GetMapping("/{civicId}")
-    public Citizen get(@PathVariable String civicId){
+    public Citizen get(@PathVariable String civicId) {
         return service.findCitizenByCivicId(civicId);
     }
 
     @GetMapping("/search")
-    public List<Citizen> search(@RequestParam String name){
-        return service.searchCitizens(name);
+    public List<Citizen> search(@RequestParam String query) {
+        return service.searchCitizens(query);
     }
 
     @PostMapping("/household")
-    public Household household(@RequestBody Map<String,Object> payload){
+    public Household household(@RequestBody Map<String, Object> payload) {
         return service.createHousehold(
-                (String)payload.get("headCitizenId"),
-                (Map<String,String>)payload.get("relations")
-        );
+                (String) payload.get("headCitizenId"),
+                (Map<String, String>) payload.get("relations"));
     }
 
     @GetMapping("/household/{id}")
-    public List<Citizen> family(@PathVariable String id){
+    public List<Citizen> family(@PathVariable String id) {
         return service.findFamilyMembers(id);
+    }
+
+    @PutMapping("/{civicId}")
+    public Citizen update(@PathVariable String civicId, @RequestBody Citizen c) {
+        return service.updateCitizen(civicId, c);
     }
 }

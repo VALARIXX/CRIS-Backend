@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
-
 	@Override
 	public ResponseEntity<String> CreateUser(Map<String, String> body) {
 
@@ -43,9 +42,19 @@ public class UserServiceImpl implements UserService {
 		String aadharNumber = body.get("aadharNumber");
 		String password = body.get("password");
 
-		if (userRepository.getUserByEmail(email).isPresent()) {
+		if (userRepository.existsByEmail(email)) {
 			return ResponseEntity.status(HttpStatus.CONFLICT)
 					.body("Email already exists");
+		}
+
+		if (userRepository.existsByPhoneNumber(phoneNumber)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body("Phone number already registered");
+		}
+
+		if (userRepository.existsByAadharNumber(aadharNumber)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body("Aadhar number already registered");
 		}
 
 		String encodedPassword = passwordEncoder.encode(password);
@@ -93,7 +102,9 @@ public class UserServiceImpl implements UserService {
 		return ResponseEntity.ok(Map.of(
 				"token", token,
 				"role", user.getRole(),
-				"username", user.getUsername()
-		));
+				"username", user.getUsername(),
+				"id", user.getId(),
+				"email", user.getEmail(),
+				"aadharNumber", user.getAadharNumber()));
 	}
 }
