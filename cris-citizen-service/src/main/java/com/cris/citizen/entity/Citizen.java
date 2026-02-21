@@ -34,11 +34,23 @@ public class Citizen {
     private String education;
     private String occupation;
     private String mobile;
+    private String email;
 
     private String householdId;
     private String relationshipToHead;
 
     private String residencyStatus;
+
+    private String fatherName;
+    private String motherName;
+    private String maritalStatus;
+    private String bloodGroup;
+    private String nationality;
+
+    @Indexed(unique = true)
+    private String aadharNumber;
+
+    private String photoUrl;
 
     private Instant createdAt;
 }

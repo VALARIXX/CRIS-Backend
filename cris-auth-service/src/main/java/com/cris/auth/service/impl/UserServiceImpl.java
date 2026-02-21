@@ -33,19 +33,51 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
-
 	@Override
 	public ResponseEntity<String> CreateUser(Map<String, String> body) {
+		return saveUser(body, userRole.Citizen);
+	}
 
+	@Override
+	public ResponseEntity<?> adminCreateUser(Map<String, String> body) {
+		userRole role = userRole.Citizen;
+		if (body.containsKey("role")) {
+			String roleStr = body.get("role");
+			try {
+				if ("OFFICER".equalsIgnoreCase(roleStr)) {
+					role = userRole.Officer;
+				} else if ("ADMIN".equalsIgnoreCase(roleStr)) {
+					role = userRole.Admin;
+				} else {
+					role = userRole.valueOf(roleStr);
+				}
+			} catch (IllegalArgumentException e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid role: " + roleStr);
+			}
+		}
+		return saveUser(body, role);
+	}
+
+	private ResponseEntity<String> saveUser(Map<String, String> body, userRole role) {
 		String username = body.get("username");
 		String email = body.get("email");
 		String phoneNumber = body.get("phoneNumber");
 		String aadharNumber = body.get("aadharNumber");
 		String password = body.get("password");
 
-		if (userRepository.getUserByEmail(email).isPresent()) {
+		if (userRepository.existsByEmail(email)) {
 			return ResponseEntity.status(HttpStatus.CONFLICT)
 					.body("Email already exists");
+		}
+
+		if (userRepository.existsByPhoneNumber(phoneNumber)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body("Phone number already registered");
+		}
+
+		if (userRepository.existsByAadharNumber(aadharNumber)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body("Aadhar number already registered");
 		}
 
 		String encodedPassword = passwordEncoder.encode(password);
@@ -56,13 +88,13 @@ public class UserServiceImpl implements UserService {
 		user.setPhoneNumber(phoneNumber);
 		user.setAadharNumber(aadharNumber);
 		user.setPassword(encodedPassword);
-		user.setRole(userRole.Citizen);
+		user.setRole(role);
 		user.setLastLogin(null);
 
 		userRepository.save(user);
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body("User registered successfully");
+				.body("User created successfully");
 	}
 
 	@Override
@@ -93,7 +125,42 @@ public class UserServiceImpl implements UserService {
 		return ResponseEntity.ok(Map.of(
 				"token", token,
 				"role", user.getRole(),
-				"username", user.getUsername()
-		));
+				"username", user.getUsername(),
+				"id", user.getId(),
+				"email", user.getEmail(),
+				"aadharNumber", user.getAadharNumber()));
+	}
+
+	@Override
+	public ResponseEntity<?> getAllUsers() {
+		return ResponseEntity.ok(userRepository.findAll());
+	}
+
+	@Override
+	public ResponseEntity<?> updateUser(Long id, Map<String, String> body) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User not found"));
+
+		if (body.containsKey("username"))
+			user.setUsername(body.get("username"));
+		if (body.containsKey("email"))
+			user.setEmail(body.get("email"));
+		if (body.containsKey("role"))
+			user.setRole(userRole.valueOf(body.get("role")));
+		if (body.containsKey("password") && !body.get("password").isEmpty()) {
+			user.setPassword(passwordEncoder.encode(body.get("password")));
+		}
+
+		userRepository.save(user);
+		return ResponseEntity.ok("User updated successfully");
+	}
+
+	@Override
+	public ResponseEntity<?> deleteUser(Long id) {
+		if (!userRepository.existsById(id)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		}
+		userRepository.deleteById(id);
+		return ResponseEntity.ok("User deleted successfully");
 	}
 }

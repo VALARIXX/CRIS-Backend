@@ -12,9 +12,15 @@ public interface CitizenService {
 
     Citizen findCitizenByCivicId(String civicId);
 
-    List<Citizen> searchCitizens(String name);
+    Citizen findCitizenByAadhar(String aadhar);
 
-    Household createHousehold(String headCitizenId, Map<String,String> relations);
+    List<Citizen> searchCitizens(String query);
+
+    List<Citizen> getAllCitizens();
+
+    Household createHousehold(String headCitizenId, Map<String, String> relations);
 
     List<Citizen> findFamilyMembers(String householdId);
+
+    Citizen updateCitizen(String citizenId, Citizen citizen);
 }
