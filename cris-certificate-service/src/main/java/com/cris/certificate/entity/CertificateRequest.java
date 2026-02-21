@@ -37,6 +37,8 @@ public class CertificateRequest {
 
     private Double amount;
 
+    private LocalDateTime processedAt; // Set when status changes to APPROVED/REJECTED
+
     public void prePersist() {
         this.applicationDate = LocalDateTime.now();
         if (this.status == null) {

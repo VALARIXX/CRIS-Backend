@@ -21,7 +21,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Hardcoded initialization removed
+        createAdminIfNotFound("admin@gov.in", "admin123", "System Admin", "000000000000", "0000000000");
     }
 
     private void createAdminIfNotFound(String email, String password, String username, String aadhar, String phone) {

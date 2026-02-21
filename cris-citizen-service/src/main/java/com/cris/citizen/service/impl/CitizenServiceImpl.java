@@ -46,6 +46,11 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
+    public List<Citizen> getAllCitizens() {
+        return citizenRepository.findAll();
+    }
+
+    @Override
     public Household createHousehold(String headCitizenId, Map<String, String> relations) {
 
         Citizen head = citizenRepository.findByCitizenId(headCitizenId)

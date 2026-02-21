@@ -16,6 +16,8 @@ public interface CitizenService {
 
     List<Citizen> searchCitizens(String query);
 
+    List<Citizen> getAllCitizens();
+
     Household createHousehold(String headCitizenId, Map<String, String> relations);
 
     List<Citizen> findFamilyMembers(String householdId);

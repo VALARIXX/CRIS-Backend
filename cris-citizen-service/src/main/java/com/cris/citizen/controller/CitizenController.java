@@ -16,6 +16,11 @@ public class CitizenController {
 
     private final CitizenService service;
 
+    @GetMapping
+    public List<Citizen> getAll() {
+        return service.getAllCitizens();
+    }
+
     @PostMapping("/enroll")
     public Citizen enroll(@RequestBody Citizen c) {
         return service.registerCitizen(c);

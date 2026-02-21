@@ -34,6 +34,7 @@ public class Citizen {
     private String education;
     private String occupation;
     private String mobile;
+    private String email;
 
     private String householdId;
     private String relationshipToHead;

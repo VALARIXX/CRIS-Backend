@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8085
 
 spring:
   application:
@@ -14,11 +14,11 @@ spring:
         - id: auth-service
           uri: lb://cris-auth-service
           predicates:
-            - Path=/auth/**
+            - Path=/auth/**, /api/users/**
         - id: citizen-service
           uri: lb://cris-citizen-service
           predicates:
-            - Path=/api/citizens/**
+            - Path=/api/citizens, /api/citizens/**
         - id: certificate-service
           uri: lb://cris-certificate-service
           predicates:
