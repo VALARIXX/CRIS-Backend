@@ -35,8 +35,19 @@ public class CitizenServiceImpl implements CitizenService {
     }
 
     @Override
+    public Citizen findCitizenByAadhar(String aadhar) {
+        return citizenRepository.findByAadharNumber(aadhar)
+                .orElseThrow(() -> new RuntimeException("Citizen not found"));
+    }
+
+    @Override
     public List<Citizen> searchCitizens(String query) {
         return citizenRepository.searchByNameOrId(query);
+    }
+
+    @Override
+    public List<Citizen> getAllCitizens() {
+        return citizenRepository.findAll();
     }
 
     @Override

@@ -1,8 +1,6 @@
 com\cris\certificate\CrisCertificateServiceApplication.class
 com\cris\certificate\entity\CertificateRequest$CertificateRequestBuilder.class
 com\cris\certificate\service\CertificateService.class
-com\cris\certificate\service\PdfService.class
 com\cris\certificate\entity\CertificateRequest.class
 com\cris\certificate\controller\CertificateController.class
 com\cris\certificate\repository\CertificateRepository.class
-com\cris\certificate\service\impl\CertificateServiceImpl.class

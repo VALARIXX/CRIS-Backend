@@ -40,6 +40,11 @@ public class CertificateController {
         return ResponseEntity.ok(service.getRequestById(id));
     }
 
+    @GetMapping("/approved-today")
+    public ResponseEntity<List<CertificateRequest>> getApprovedToday() {
+        return ResponseEntity.ok(service.getApprovedToday());
+    }
+
     @GetMapping("/pending")
     public ResponseEntity<List<CertificateRequest>> getPendingRequests() {
         return ResponseEntity.ok(service.getRequestsByStatus("PENDING"));

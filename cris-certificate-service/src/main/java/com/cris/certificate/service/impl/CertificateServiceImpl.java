@@ -7,6 +7,7 @@ import com.cris.certificate.service.PdfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,12 +33,20 @@ public class CertificateServiceImpl implements CertificateService {
         CertificateRequest request = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
         request.setStatus(status);
+        request.setProcessedAt(LocalDateTime.now());
         return repository.save(request);
     }
 
     @Override
     public List<CertificateRequest> getRequestsByStatus(String status) {
         return repository.findByStatus(status);
+    }
+
+    @Override
+    public List<CertificateRequest> getApprovedToday() {
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+        return repository.findByStatusAndProcessedAtBetween("APPROVED", startOfDay, endOfDay);
     }
 
     @Override

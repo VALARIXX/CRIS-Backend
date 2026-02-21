@@ -1,5 +1,0 @@
-package com.cris.auth.repository;
-
-public interface UserRepository {
-
-}

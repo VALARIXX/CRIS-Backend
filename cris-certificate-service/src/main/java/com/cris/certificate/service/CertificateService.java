@@ -13,6 +13,8 @@ public interface CertificateService {
 
     List<CertificateRequest> getRequestsByStatus(String status);
 
+    List<CertificateRequest> getApprovedToday();
+
     CertificateRequest getRequestById(String id);
 
     byte[] generateCertificatePdf(String id);

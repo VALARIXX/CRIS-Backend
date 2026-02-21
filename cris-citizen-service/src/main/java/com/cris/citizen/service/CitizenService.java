@@ -12,7 +12,11 @@ public interface CitizenService {
 
     Citizen findCitizenByCivicId(String civicId);
 
+    Citizen findCitizenByAadhar(String aadhar);
+
     List<Citizen> searchCitizens(String query);
+
+    List<Citizen> getAllCitizens();
 
     Household createHousehold(String headCitizenId, Map<String, String> relations);
 

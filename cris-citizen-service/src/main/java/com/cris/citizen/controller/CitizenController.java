@@ -3,6 +3,8 @@ package com.cris.citizen.controller;
 import com.cris.citizen.entity.*;
 import com.cris.citizen.service.CitizenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -14,14 +16,32 @@ public class CitizenController {
 
     private final CitizenService service;
 
+    @GetMapping
+    public List<Citizen> getAll() {
+        return service.getAllCitizens();
+    }
+
     @PostMapping("/enroll")
     public Citizen enroll(@RequestBody Citizen c) {
         return service.registerCitizen(c);
     }
 
     @GetMapping("/{civicId}")
-    public Citizen get(@PathVariable String civicId) {
-        return service.findCitizenByCivicId(civicId);
+    public ResponseEntity<?> get(@PathVariable String civicId) {
+        try {
+            return ResponseEntity.ok(service.findCitizenByCivicId(civicId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/aadhar/{aadhar}")
+    public ResponseEntity<?> getByAadhar(@PathVariable String aadhar) {
+        try {
+            return ResponseEntity.ok(service.findCitizenByAadhar(aadhar));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/search")

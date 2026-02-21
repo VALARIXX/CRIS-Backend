@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface CitizenRepository extends MongoRepository<Citizen, String> {
     Optional<Citizen> findByCitizenId(String citizenId);
 
+    Optional<Citizen> findByAadharNumber(String aadharNumber);
+
     @org.springframework.data.mongodb.repository.Query("{ '$or': [ { 'fullName': { '$regex': ?0, '$options': 'i' } }, { 'citizenId': { '$regex': ?0, '$options': 'i' } } ] }")
     List<Citizen> searchByNameOrId(String query);
 
